@@ -1,0 +1,24 @@
+name: model_develop
+description: This package generates models from a json file within the lib
+version: 1.0.0
+autor: Hallan Abreu <jotahagar@gmail.com>
+homepage: https://github.com/hallanabreu2020/custom_alert_snackbar
+
+
+environment:
+  sdk: '>=3.1.0 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+scripts:
+  post_install: dart lib/instal.dart
+
+flutter:
