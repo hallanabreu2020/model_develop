@@ -77,5 +77,3 @@ void main(List<String> args) {
   ]
 }
 
-
-```# model_develop
