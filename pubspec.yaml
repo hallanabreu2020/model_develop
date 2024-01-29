@@ -2,7 +2,7 @@ name: model_develop
 description: This package generates models from a json file within the lib
 version: 1.0.0
 autor: Hallan Abreu <jotahagar@gmail.com>
-homepage: https://github.com/hallanabreu2020/custom_alert_snackbar
+homepage: https://github.com/hallanabreu2020/model_develop
 
 
 environment:
