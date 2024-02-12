@@ -1,0 +1,43 @@
+{
+    "usuario": {
+      "id": 1,
+      "nome": "Alice",
+      "idade": 30,
+      "endereco": {
+        "rua": "Rua 1",
+        "cidade": "Cidade A",
+        "estado": "Estado X"
+      },
+      "email": "alice@email.com",
+      "telefone": "123-456-7890"
+    },
+    "outrasInformacoes": {
+      "ultimaAtualizacao": "2022-03-01T12:30:45Z",
+      "categoriasInteresse": ["Tecnologia", "Viagens", "Esportes"],
+      "notas": "Usuário ativo, preferências atualizadas regularmente."
+    },
+    "historicoCompras": [
+      {
+        "idCompra": 12345,
+        "dataCompra": "2022-02-15T09:45:00Z",
+        "itens": [
+          {"produto": "Laptop", "quantidade": 1, "precoUnitario": 1200.00},
+          {"produto": "Mouse", "quantidade": 2, "precoUnitario": 30.00}
+        ],
+        "total": 1260.00
+      },
+      {
+        "idCompra": 12346,
+        "dataCompra": "2022-03-05T14:20:30Z",
+        "itens": [
+          {"produto": "Livro", "quantidade": 3, "precoUnitario": 15.00},
+          {"produto": "Fones de Ouvido", "quantidade": 1, "precoUnitario": 50.00}
+        ],
+        "total": 95.00
+      }
+    ],
+    "avisos": [
+      {"tipo": "promoção", "mensagem": "Desconto especial na próxima compra!"},
+      {"tipo": "anúncio", "mensagem": "Novos produtos em breve. Fique atento!"}
+    ]
+  }

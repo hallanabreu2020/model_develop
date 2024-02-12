@@ -64,11 +64,40 @@ class Capitalize{
 class GetFrom{
   static  String getFromJsonConversion(MapEntry<String, dynamic> entry) {
     if (entry.value is Map) {
-      return '${ConverterCamelCase.converterCamelCase(Capitalize.capitalizeFirstLetter(entry.key))}Model.fromJson(json["${entry.key}"])';
+      return '${ConverterCamelCase.converterCamelCase(Capitalize.capitalizeFirstLetter(entry.key))}Model.fromJson(json["${entry.key}"] ${GetTypeNoNull.getType(entry)})';
     }else if(entry.value is List){
-      return "${ConverterCamelCase.converterCamelCase(GetType.getTipoDart(entry))}.from(json['${entry.key}'].map((x) => x))";
+      return "json['${entry.key}'] == null ? ${GetTypeNoNull.getType(entry)} : ${ConverterCamelCase.converterCamelCase(GetType.getTipoDart(entry))}.from(json['${entry.key}'].map((x) => x))";
     }
-    return 'json["${entry.key}"]';
+    return 'json["${entry.key}"] ${GetTypeNoNull.getType(entry)}';
+  }
+}
+
+class GetTypeNoNull{
+  static String getType(MapEntry<String, dynamic> entry){
+    String stringReturn = "";
+    if (entry.value is String) {
+      stringReturn = "?? ''";
+    } else if (entry.value is int) {
+      stringReturn = "?? 0";
+    } else if (entry.value is double) {
+      stringReturn = "?? 0";
+    } else if (entry.value is bool) {
+      stringReturn = "?? false";
+    }else if(entry.value is Map){
+      stringReturn = "?? {'':''}";
+    }else if(entry.value is List){
+      if (entry.value.isNotEmpty) {
+        if(entry.value.first is Map){
+          stringReturn = "<${ConverterCamelCase.converterCamelCase(Capitalize.capitalizeFirstLetter(entry.key))}Model>[]";
+        }else{
+          stringReturn = "<${ConverterCamelCase.converterCamelCase(GetList.getList(entry.value))}>[]";
+        }
+      } else {
+        stringReturn = '<dynamic>[]';
+      }
+      
+    }
+    return stringReturn;
   }
 }
 
@@ -145,6 +174,7 @@ class GeradorModelo {
     final Map<String, dynamic> jsonData = json.decode(jsonBody);
 
     final StringBuffer buffer = StringBuffer();
+    final StringBuffer bufferCopyWith = StringBuffer();
 
     List<String> internalClasses = [];
     GenerateClasses.generateInternalClasses(jsonData, internalClasses);
@@ -152,15 +182,20 @@ class GeradorModelo {
     Iterable newValue = internalClasses.reversed;
     buffer.writeAll(newValue);
 
+    bufferCopyWith.writeln('  ${ConverterCamelCase.converterCamelCase(nameClasse)} copyWith({');
+
     buffer.writeln('class ${ConverterCamelCase.converterCamelCase(nameClasse)} {');
 
     List<String> entryValueFirst = [];
     List<String> entryKey = [];
+    List<String> bufferCopyWithString = [];
 
     for (final entry in jsonData.entries) {
       final key = entry.key;
       String getTipoDart = GetType.getTipoDart(entry);
-      buffer.writeln('  $getTipoDart ${ConverterCamelCase.converterCamelCase(key)};');
+      buffer.writeln(' final $getTipoDart ${ConverterCamelCase.converterCamelCase(key)};');
+      bufferCopyWith.writeln('    $getTipoDart? ${ConverterCamelCase.converterCamelCase(key)},');
+      bufferCopyWithString.add(ConverterCamelCase.converterCamelCase(key));
       if(getTipoDart.contains("Model") && getTipoDart.contains("List<")){
         entryValueFirst.add(jsonEncode(entry.value.first));
         entryKey.add("${Capitalize.capitalizeFirstLetter(entry.key)}Model");
@@ -174,6 +209,12 @@ class GeradorModelo {
       buffer.writeln('    required this.${ConverterCamelCase.converterCamelCase(key)},');
     }
 
+    bufferCopyWith.writeln('  }) => ');
+    bufferCopyWith.writeln('    ${ConverterCamelCase.converterCamelCase(nameClasse)} (');
+    for(var i in bufferCopyWithString){
+      bufferCopyWith.writeln('    $i: $i ?? this.$i,');
+    }
+    bufferCopyWith.writeln('  );');
     buffer.writeln('  });');
 
     buffer.writeln('\n  factory ${ConverterCamelCase.converterCamelCase(nameClasse)}.fromJson(Map<String, dynamic> json) => ${ConverterCamelCase.converterCamelCase(nameClasse)}(');
@@ -192,13 +233,17 @@ class GeradorModelo {
       buffer.writeln('    "$key": ${ConverterCamelCase.converterCamelCase(key)},');
     }
 
-    buffer.writeln('  };');
+    
+    buffer.writeln('  }; \n');
+
+    buffer.writeln(bufferCopyWith);
 
     buffer.writeln('}\n');
 
     for(int i = 0 ; i < entryValueFirst.length ; i++){
       buffer.writeln(gerarModeloDart(entryValueFirst[i], entryKey[i]));
     }
+
 
 
     return buffer;

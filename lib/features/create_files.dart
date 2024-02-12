@@ -90,7 +90,7 @@ ${codigoModelo.toString()}
 ///    dart 'location_of_file_created_in_base' -create
 /// 
   static void meet() {
-    String pathFromTheDirectory = 'example/lib';
+    String pathFromTheDirectory = 'lib';
 
     List<File> filesFound = FindFile.buscarArquivosNoDiretorio(pathFromTheDirectory, '.json');
 
@@ -99,7 +99,7 @@ ${codigoModelo.toString()}
         CreateFiles.readFiles(fileValue.path);
       }
     } else {
-      print('Nenhum arquivo .txt encontrado. | No .txt files found.');
+      print('Nenhum arquivo .txt encontrado. | No .json files found.');
     }
   }
   
