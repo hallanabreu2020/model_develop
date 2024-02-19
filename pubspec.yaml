@@ -22,3 +22,6 @@ scripts:
   post_install: dart lib/instal.dart
 
 flutter:
+
+executables:
+  test_command: bin/test.dart

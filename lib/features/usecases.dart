@@ -241,7 +241,7 @@ class GeradorModelo {
     buffer.writeln('}\n');
 
     for(int i = 0 ; i < entryValueFirst.length ; i++){
-      buffer.writeln(gerarModeloDart(entryValueFirst[i], entryKey[i]));
+      buffer.writeln(gerarModeloDart(entryValueFirst.reversed.toList()[i], entryKey.reversed.toList()[i]));
     }
 
 
